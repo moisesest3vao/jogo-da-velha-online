@@ -59,7 +59,7 @@ public class JogoService {
     public Jogo executarJogada(Jogada jogada){
         Map<String, Jogo> jogos = JogoStorage.getInstancia().getJogos();
         if(!jogos.containsKey(jogada.getIdJogo())){
-            throw new RuntimeException("O jogo com esse id não existe");
+            throw new RuntimeException("O jogo com o id "+jogada.getIdJogo()+" não existe");
         }
 
         Jogo jogo = jogos.get(jogada.getIdJogo());
