@@ -70,11 +70,23 @@ public class JogoService {
         int[][] quadro = jogo.getQuadro();
         quadro[jogada.getCoordenadaX()][jogada.getCoordenadaY()] = jogada.getMarcador().getValor();
 
-        verificarVencedor(jogo.getQuadro(), Marcador.O);
-        verificarVencedor(jogo.getQuadro(), Marcador.X);
+        boolean isOVencedor = verificarVencedor(jogo.getQuadro(), Marcador.O);
+        boolean isXVencedor = verificarVencedor(jogo.getQuadro(), Marcador.X);
+        boolean deuVelha = verificarSeDeuVelha();
+        if(isXVencedor){
+            jogo.setStatus(StatusJogo.TERMINADO);
+            jogo.setVencedor(Marcador.X);
+        } else if (isOVencedor){
+            jogo.setStatus(StatusJogo.TERMINADO);
+            jogo.setVencedor(Marcador.O);
+        }
 
         JogoStorage.getInstancia().addJogo(jogo);
         return jogo;
+    }
+
+    private boolean verificarSeDeuVelha() {
+        return false;
     }
 
     private boolean verificarVencedor(int[][] quadro, Marcador marcador) {
