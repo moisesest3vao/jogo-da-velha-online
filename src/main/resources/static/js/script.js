@@ -2,7 +2,7 @@ var quadro = [["#", "#", "#"], ["#", "#", "#"], ["#", "#", "#"]];
 var jogada = "";
 var jogoIniciou = false;
 
-function turnoDoJogador(_turn, id) {
+function turnoDoJogador(turn, id) {
     if (jogoIniciou) {
         var spotTaken = $("#" + id).text();
         if (spotTaken != "O" && spotTaken != "X") {
@@ -27,8 +27,11 @@ function executarJogada(marcador, coordenadaX, coordenadaY) {
             jogoIniciou = false;
             exibirResposta(data);
         },
-        error: function (error) {
-            console.log(error);
+        error: function (xhr, textStatus) {
+            let statusCode = xhr.status;
+            if(statusCode == 500){
+                alert("Aguarde sua vez de jogar!");
+            }            
         }
     })
 }
@@ -54,9 +57,12 @@ function exibirResposta(data) {
     if (vencedor != null) {
         if (vencedor == marcador) {
             alert("Você venceu!");
+        } else if(vencedor == "VELHA" ) {
+            alert("Deu velha!");
         } else {
             alert("O seu oponente venceu...");
         }
+
         window.location.reload();
     }
     jogoIniciou = true;

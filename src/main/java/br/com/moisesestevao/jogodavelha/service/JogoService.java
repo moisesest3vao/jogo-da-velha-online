@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Slf4j
@@ -96,7 +97,7 @@ public class JogoService {
 
         boolean isOVencedor = verificarVencedor(jogo.getQuadro(), Marcador.O);
         boolean isXVencedor = verificarVencedor(jogo.getQuadro(), Marcador.X);
-        boolean isVelha = verificarVelha();
+        boolean isVelha = verificarVelha(jogo.getQuadro());
 
         if(isXVencedor){
             jogo.setStatus(StatusJogo.TERMINADO);
@@ -123,8 +124,17 @@ public class JogoService {
         return jogo;
     }
 
-    private boolean verificarVelha() {
-        return false;
+    private boolean verificarVelha(int[][] quadro) {
+        boolean isCamposPreenchidos = true;
+        for (int i = 0; i < quadro.length; i++ ){
+            for (int j = 0; j < quadro[i].length; j++ ){
+                if(quadro[i][j] != 1 && quadro[i][j] != 2){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private boolean verificarVencedor(int[][] quadro, Marcador marcador) {
