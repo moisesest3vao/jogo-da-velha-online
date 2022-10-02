@@ -68,8 +68,11 @@ function conectarAJogoAleatorio() {
                 conectarSocket(idJogo);
                 alert("Você entrou em uma sessão com: " + data.jogador1.login);
             },
-            error: function (error) {
-                console.log(error);
+            error: function (xhr, textStatus) {
+                let statusCode = xhr.status;
+                if(statusCode == 500){
+                    alert("Não há nenhum jogo disponível no momento");
+                }            
             }
         })
     }
@@ -102,8 +105,11 @@ function conectarAJogo() {
                 conectarSocket(idJogo);
                 alert("Congrats you're playing with: " + data.jogador1.login);
             },
-            error: function (error) {
-                console.log(error);
+            error: function (xhr, textStatus) {
+                let statusCode = xhr.status;
+                if(statusCode == 500){
+                    alert("Já há dois jogadores nessa partida!");
+                }            
             }
         })
     }
