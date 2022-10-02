@@ -5,22 +5,19 @@ import br.com.moisesestevao.jogodavelha.models.Jogador;
 import br.com.moisesestevao.jogodavelha.models.Jogo;
 import br.com.moisesestevao.jogodavelha.models.enums.Marcador;
 import br.com.moisesestevao.jogodavelha.models.enums.StatusJogo;
+import br.com.moisesestevao.jogodavelha.models.enums.Turno;
 import br.com.moisesestevao.jogodavelha.storage.JogoStorage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Service
+@Slf4j
 public class JogoService {
 
     public Jogo criarJogo(Jogador jogador){
-        Jogo jogo = new Jogo();
-        jogo.setId(UUID.randomUUID().toString());
-        jogo.setJogador1(jogador);
-        jogo.setQuadro(new int [3][3]);
-        jogo.setStatus(StatusJogo.NOVO);
-
+        Jogo jogo = new Jogo(jogador);
         JogoStorage.getInstancia().addJogo(jogo);
 
         return jogo;
@@ -56,36 +53,77 @@ public class JogoService {
         return jogoAleatorio;
     }
 
-    public Jogo executarJogada(Jogada jogada){
-        Map<String, Jogo> jogos = JogoStorage.getInstancia().getJogos();
+    public boolean isJogadaValida(Jogada jogada, Map<String, Jogo> jogos){
         if(!jogos.containsKey(jogada.getIdJogo())){
-            throw new RuntimeException("O jogo com o id "+jogada.getIdJogo()+" não existe");
+            log.error("O jogo com o id "+jogada.getIdJogo()+" não existe");
+            return false;
         }
 
         Jogo jogo = jogos.get(jogada.getIdJogo());
         if(jogo.getStatus().equals(StatusJogo.TERMINADO)){
-            throw new RuntimeException("O jogo já foi terminado");
+            log.error("O jogo já foi terminado");
+            return false;
         }
+
+        Turno turno = jogo.getTurno();
+        Marcador marcador = jogada.getMarcador();
+
+        if(turno == Turno.JOGADOR1){
+            if(marcador != Marcador.X){
+                log.error("Não é sua vez de jogar");
+                return false;
+            }
+        } else if(turno == Turno.JOGADOR2){
+            if(marcador != Marcador.O){
+                log.error("Não é sua vez de jogar");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public Jogo executarJogada(Jogada jogada){
+        Map<String, Jogo> jogos = JogoStorage.getInstancia().getJogos();
+        boolean jogadaValida = isJogadaValida(jogada, jogos);
+        if(!jogadaValida){
+            return null;
+        }
+        Jogo jogo = jogos.get(jogada.getIdJogo());
 
         int[][] quadro = jogo.getQuadro();
         quadro[jogada.getCoordenadaX()][jogada.getCoordenadaY()] = jogada.getMarcador().getValor();
 
         boolean isOVencedor = verificarVencedor(jogo.getQuadro(), Marcador.O);
         boolean isXVencedor = verificarVencedor(jogo.getQuadro(), Marcador.X);
-        boolean deuVelha = verificarSeDeuVelha();
+        boolean isVelha = verificarVelha();
+
         if(isXVencedor){
             jogo.setStatus(StatusJogo.TERMINADO);
             jogo.setVencedor(Marcador.X);
         } else if (isOVencedor){
             jogo.setStatus(StatusJogo.TERMINADO);
             jogo.setVencedor(Marcador.O);
+        } else if (isVelha){
+            jogo.setStatus(StatusJogo.TERMINADO);
+            jogo.setVencedor(Marcador.VELHA);
         }
+        jogo = alternarTurno(jogo);
 
         JogoStorage.getInstancia().addJogo(jogo);
         return jogo;
     }
 
-    private boolean verificarSeDeuVelha() {
+    private Jogo alternarTurno(Jogo jogo) {
+        if(jogo.getTurno() == Turno.JOGADOR1){
+            jogo.setTurno(Turno.JOGADOR2);
+        } else if(jogo.getTurno() == Turno.JOGADOR2){
+            jogo.setTurno(Turno.JOGADOR1);
+        }
+        return jogo;
+    }
+
+    private boolean verificarVelha() {
         return false;
     }
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Marcador {
-    X(1), O(2);
+    X(1), O(2), VELHA(9);
 
     private Integer valor;
 }

@@ -2,7 +2,7 @@ var quadro = [["#", "#", "#"], ["#", "#", "#"], ["#", "#", "#"]];
 var jogada = "";
 var jogoIniciou = false;
 
-function turnoDoJogador(turn, id) {
+function turnoDoJogador(_turn, id) {
     if (jogoIniciou) {
         var spotTaken = $("#" + id).text();
         if (spotTaken != "O" && spotTaken != "X") {
@@ -57,18 +57,19 @@ function exibirResposta(data) {
         } else {
             alert("O seu oponente venceu...");
         }
+        window.location.reload();
     }
     jogoIniciou = true;
 }
 
-$(".tic").click(function () {
-    var slot = $(this).attr('id');
-    turnoDoJogador(jogada, slot);
+$(".campo").click(function () {
+    var coordenadas = $(this).attr('id');
+    turnoDoJogador(jogada, coordenadas);
 });
 
 function reset() {
     quadro = [["#", "#", "#"], ["#", "#", "#"], ["#", "#", "#"]];
-    $(".tic").text("#");
+    $(".campo").text("#");
 }
 
 $("#reset").click(function () {
