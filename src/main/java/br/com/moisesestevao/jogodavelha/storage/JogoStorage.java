@@ -27,4 +27,8 @@ public class JogoStorage {
     public void addJogo(Jogo jogo){
         jogos.put(jogo.getId(), jogo);
     }
+
+    public static void apagarJogos(){
+        jogos = new HashMap<>();
+    }
 }

@@ -51,6 +51,9 @@ public class JogoController {
     public ResponseEntity<Jogo> executarJogada(@RequestBody Jogada jogada){
         log.info("tentando executar jogada" + jogada.toString());
         Jogo jogo = this.jogoService.executarJogada(jogada);
+        if(jogo == null){
+            return ResponseEntity.internalServerError().build();
+        }
         this.simpMessagingTemplate.convertAndSend("/topic/progresso-jogo/" + jogo.getId(), jogo);
 
         return ResponseEntity.ok(jogo);
