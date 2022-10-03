@@ -1,6 +1,8 @@
 var quadro = [["#", "#", "#"], ["#", "#", "#"], ["#", "#", "#"]];
 var jogada = "";
 var jogoIniciou = false;
+var isCriadorDaPartida = false;
+var alertouConexao = false;
 
 function turnoDoJogador(turn, id) {
     if (jogoIniciou) {
@@ -65,7 +67,25 @@ function exibirResposta(data) {
 
         window.location.reload();
     }
+
+    if(isCriadorDaPartida == true && alertouConexao == false){
+        let oponente = data.jogador2;
+
+        if(oponente != null){
+            alertarConexaoParaUsuario(oponente.login);
+            alertouConexao = true;
+        }
+    }
+    
+
+
     jogoIniciou = true;
+}
+
+function alertarConexaoParaUsuario(nomeDoOponente){
+    alert("Você entrou em uma sessão com: " + nomeDoOponente);
+    $("#oponentLogin").text(nomeDoOponente);
+    $("footer").css('display', 'block');
 }
 
 $(".campo").click(function () {

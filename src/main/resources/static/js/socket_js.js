@@ -38,6 +38,7 @@ function criarJogo() {
                 reset();
                 conectarSocket(idJogo);
                 alert("Parabéns, você criou um jogo. O id do jogo é: " + data.id);
+                isCriadorDaPartida = true;
                 jogoIniciou = true;
             },
             error: function (error) {
@@ -66,7 +67,7 @@ function conectarAJogoAleatorio() {
                 marcador = 'O';
                 reset();
                 conectarSocket(idJogo);
-                alert("Você entrou em uma sessão com: " + data.jogador1.login);
+                alertarConexaoParaUsuario(data.jogador1.login);
             },
             error: function (xhr, textStatus) {
                 let statusCode = xhr.status;
@@ -103,7 +104,7 @@ function conectarAJogo() {
                 marcador = 'O';
                 reset();
                 conectarSocket(idJogo);
-                alert("Congrats you're playing with: " + data.jogador1.login);
+                alertarConexaoParaUsuario(data.jogador1.login);
             },
             error: function (xhr, textStatus) {
                 let statusCode = xhr.status;

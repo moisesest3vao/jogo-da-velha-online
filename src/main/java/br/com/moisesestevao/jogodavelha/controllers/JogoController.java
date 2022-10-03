@@ -36,7 +36,10 @@ public class JogoController {
                 + "' ao jogo de id: '"
                 + request.getIdJogo()+"'");
 
-        return ResponseEntity.ok(this.jogoService.conectarAoJogo(request.getJogador(), request.getIdJogo()));
+        Jogo jogo = this.jogoService.conectarAoJogo(request.getJogador(), request.getIdJogo());
+        this.simpMessagingTemplate.convertAndSend("/topic/progresso-jogo/" + jogo.getId(), jogo);
+
+        return ResponseEntity.ok(jogo);
     }
 
     @PostMapping("/conectar-jogo/aleatorio")
@@ -44,7 +47,10 @@ public class JogoController {
         log.info("tentando conectar o jogador '"
                 + jogador.getLogin() + "' a um jogo aleatório");
 
-        return ResponseEntity.ok(this.jogoService.conectarAJogoAleatorio(jogador));
+        Jogo jogo = this.jogoService.conectarAJogoAleatorio(jogador);
+        this.simpMessagingTemplate.convertAndSend("/topic/progresso-jogo/" + jogo.getId(), jogo);
+
+        return ResponseEntity.ok(jogo);
     }
 
     @PostMapping("/executar-jogada")
