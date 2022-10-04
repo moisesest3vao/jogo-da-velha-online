@@ -17,6 +17,7 @@ function conectarSocket(idJogo) {
             exibirResposta(data);
         })
     })
+    jogoIniciou = true;
 }
 
 function criarJogo() {
@@ -37,6 +38,7 @@ function criarJogo() {
                 marcador = 'X';
                 reset();
                 conectarSocket(idJogo);
+                desabilitarBotoes();
                 alert("Parabéns, você criou um jogo. O id do jogo é: " + data.id);
                 isCriadorDaPartida = true;
                 jogoIniciou = true;
@@ -67,7 +69,9 @@ function conectarAJogoAleatorio() {
                 marcador = 'O';
                 reset();
                 conectarSocket(idJogo);
+                desabilitarBotoes();
                 alertarConexaoParaUsuario(data.jogador1.login);
+                
             },
             error: function (xhr, textStatus) {
                 let statusCode = xhr.status;
@@ -103,6 +107,7 @@ function conectarAJogo() {
                 idJogo = data.id;
                 marcador = 'O';
                 reset();
+                desabilitarBotoes();
                 conectarSocket(idJogo);
                 alertarConexaoParaUsuario(data.jogador1.login);
             },

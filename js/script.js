@@ -14,6 +14,7 @@ function turnoDoJogador(turn, id) {
 }
 
 function executarJogada(marcador, coordenadaX, coordenadaY) {
+    
     $.ajax({
         url: url + "/jogo/executar-jogada",
         type: 'POST',
@@ -76,8 +77,6 @@ function exibirResposta(data) {
             alertouConexao = true;
         }
     }
-    
-
 
     jogoIniciou = true;
 }
@@ -89,6 +88,10 @@ function alertarConexaoParaUsuario(nomeDoOponente){
 }
 
 $(".campo").click(function () {
+    if(!alertouConexao && isCriadorDaPartida){
+        alert("Aguarde alguém entrar na sua sala!");
+        return;
+    }
     var coordenadas = $(this).attr('id');
     turnoDoJogador(jogada, coordenadas);
 });
@@ -101,3 +104,7 @@ function reset() {
 $("#reset").click(function () {
     reset();
 });
+
+function desabilitarBotoes(){
+    $('button').prop('disabled',true);
+}
