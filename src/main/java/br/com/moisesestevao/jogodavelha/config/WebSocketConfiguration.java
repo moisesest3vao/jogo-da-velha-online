@@ -12,7 +12,11 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/executar-jogada")
-                .setAllowedOrigins("http://127.0.0.1:5500/","https://moisesest3vao.github.io/jogo-da-velha-online/").withSockJS();
+                .setAllowedOrigins(
+                        "http://127.0.0.1:5500/",
+                        "https://moisesest3vao.github.io/jogo-da-velha-online/",
+                        "http://aws.s3.whatever"
+                ).withSockJS();
     }
 
     @Override
