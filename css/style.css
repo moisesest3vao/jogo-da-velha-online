@@ -8,6 +8,10 @@ h1 {
     color: #fff;
 }
 
+.logo{
+    height: 100px;
+}
+
 .clearfix {
     clear: both;
 }
