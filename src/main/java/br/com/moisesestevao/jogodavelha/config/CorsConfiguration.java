@@ -15,6 +15,6 @@ public class CorsConfiguration implements WebMvcConfigurer {
                         "https://moisesest3vao.github.io/jogo-da-velha-online/",
                         "http://aws.s3.whatever"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+                .allowedMethods("POST");
     }
 }
